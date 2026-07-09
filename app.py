@@ -26,10 +26,15 @@ def analyze_audio(audio):
     transcript = result["text"]
 
     # Summary
-    if len(transcript.split()) > 50:
-        summary = summarizer(
-            transcript,
-            max_length=100,
+if len(transcript.split()) > 50:
+    summary = summarizer(
+        transcript,
+        max_length=100,
+        min_length=30,
+        do_sample=False
+    )[0]["summary_text"]
+else:
+    summary = transcript
            
 # ---------------- Gradio Interface ----------------
 
