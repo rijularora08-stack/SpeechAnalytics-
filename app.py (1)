@@ -1,1 +1,33 @@
+import gradio as gr
+import os
+import whisper
+from transformers import pipeline
 
+# Load AI models
+whisper_model = whisper.load_model("base")
+
+summarizer = pipeline(
+    "summarization",
+    model="facebook/bart-large-cnn"
+)
+
+emotion_classifier = pipeline(
+    "text-classification",
+    model="j-hartmann/emotion-english-distilroberta-base",
+    top_k=1
+)
+
+def analyze_audio(audio):
+    if audio is None:
+        return "Please upload an audio file.", "", ""
+
+    # Speech-to-Text
+    result = whisper_model.transcribe(audio)
+    transcript = result["text"]
+
+    # Summary
+    if len(transcript.split()) > 50:
+        summary = summarizer(
+            transcript,
+            max_length=100,
+           
