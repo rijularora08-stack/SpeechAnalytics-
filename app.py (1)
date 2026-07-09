@@ -31,3 +31,22 @@ def analyze_audio(audio):
             transcript,
             max_length=100,
            
+# ---------------- Gradio Interface ----------------
+
+demo = gr.Interface(
+    fn=analyze_audio,
+    inputs=gr.Audio(
+        type="filepath",
+        label="Upload Audio File"
+    ),
+    outputs=[
+        gr.Textbox(label="Transcript", lines=10),
+        gr.Textbox(label="Summary", lines=5),
+        gr.Textbox(label="Detected Emotion")
+    ],
+    title="Speech Analytics Tool",
+    description="Upload an audio file to generate transcription, summary, and emotion analysis."
+)
+
+if __name__ == "__main__":
+    demo.launch(share=True)
